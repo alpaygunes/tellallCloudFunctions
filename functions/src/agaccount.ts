@@ -19,7 +19,7 @@ export class AgAccount{
         }
     
         if(account.id){
-          let aid =  account.id;
+          const aid =  account.id;
           delete account.id;
           admin.firestore().collection("accounts").doc(aid).update({...account}).then(()=>{
             res.json(rslt);
@@ -51,7 +51,7 @@ export class AgAccount{
       }
     
       let text:string = tag;
-      let trMap:any = {
+      const trMap:any = {
                     'çÇ':'c',
                     'ğĞ':'g',
                     'şŞ':'s',
@@ -59,13 +59,13 @@ export class AgAccount{
                     'ıİ':'i',
                     'öÖ':'o'
                   };
-      for(var key in trMap) {
+      for(const key in trMap) {
         text = text.replace(new RegExp('['+key+']','g'), trMap[key]);
       }
       text =  text.replace(/[^-a-zA-Z0-9\s]+/ig, '') 
                   .replace(/\s/gi, "-") 
                   .replace(/[-]+/gi, "-") 
                   .toLowerCase();
-       return tag==text?true:false
+       return tag === text?true:false
    }
 }

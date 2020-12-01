@@ -1,6 +1,6 @@
 import { firestore } from 'firebase-admin';
 import * as functions from 'firebase-functions';
-//import * as admin from 'firebase-admin'; 
+const admin = require("firebase-admin");
 //const cors = require('cors')({origin: true});
 //admin.initializeApp(functions.config().firebase);
 export const StatsObj = { Y : 0,N : 0, Z : 0, checked : <any>[] }
@@ -12,19 +12,28 @@ export class AgStats{
                                       .document('channels/{channelId}/messages/{message_id}/feedbacks/{docID}')
                                       .onWrite(async (change, context) => {
       
-      if(context.params.docID == 'stats'){
+      if(context.params.docID === 'stats'){
          return;
       }
 
       const before_fb  = change.before.data();
       const after_fb   = change.after.data();
-
+      
+      const authUser = await admin.auth().getUser(context.params.docID);
+      console.log(authUser.email,authUser.displayName,authUser);
+      
+      change.after.ref.update({username: authUser.displayName}).then(()=>{
+         console.log("username: authUser.displayName")
+      }).catch((errr)=>{
+         console.log("username: authUser.displayName - hata",errr.message)
+      })
+ 
       // eğer ilk undefinet ise demekki önceden doc yok bu kullanıcın ilk verisi
       if(!before_fb){
          change.after.ref.parent.doc('stats').get().then((docSnapshot)=>{
             console.log(" STATS VARMI YOK MU ")
             if (!docSnapshot.exists) {
-               let fb_checked:any=[];
+               const fb_checked:any=[];
                after_fb?.checked.forEach((v:any,i:number) => {
                   fb_checked['chckt_'+i]=0;
                });
@@ -62,7 +71,7 @@ export class AgStats{
       // şimdi önceki ile yeni cevabı karşılaştıralım. stats değerini duruma göre artıralım yada azaltalım
       Object.keys(<{}>before_fb).forEach(async (v,i)=>{
          // öncekini geri al
-         if(v == 'f'){
+         if(v === 'f'){
             if(before_fb?.f === after_fb?.f){
                //console.log("DEĞİTİRME")
             }else if(before_fb?.f === 1){
@@ -90,12 +99,12 @@ export class AgStats{
             }
          }   
          
-         if(v == 'checked'){
+         if(v === 'checked'){
             before_fb?.checked.forEach(async (val:any,ind:number) => {
-               if(val === true && after_fb?.checked[ind]==false){
+               if(val === true && after_fb?.checked[ind] === false){
                   // -1
                   await AgStats.upDownStatsChecked(ind,-1,change.after.ref,after_fb);
-               }else if(val === false && after_fb?.checked[ind]==true){
+               }else if(val === false && after_fb?.checked[ind] === true){
                   //+1
                   await AgStats.upDownStatsChecked(ind,1,change.after.ref,after_fb);
                }
