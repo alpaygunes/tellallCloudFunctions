@@ -9,6 +9,7 @@ export class AgMessages{
             const messageID   = context.params.messageID    
             console.log("MESSAGE DELETE TETİKLENDİ",messageID)
             AgMessages.deleteFeedBacks(event.ref);
+            AgMessages.deleteVisitors(event.ref);
             
       }); 
 
@@ -24,6 +25,21 @@ export class AgMessages{
                   })
             }).catch((serr)=>{
                   console.log("feedbacks docları çekilirken"+serr.message)
+            })
+      }
+
+      static deleteVisitors(ref:firestore.DocumentReference){
+            console.log("deleteVisitors Siliniyor")
+            ref.collection("visitors").get().then(snapshot => {
+                  snapshot.docs.forEach(fbdoc => {  
+                        fbdoc.ref.parent.doc(fbdoc.id).delete().then(()=>{
+                              console.log("deleteVisitors Slindi")
+                        }).catch((err)=>{
+                              console.log("deleteVisitors silinemedi hata" , err.message)
+                        })
+                  })
+            }).catch((serr)=>{
+                  console.log("visitors docları çekilirken"+serr.message)
             })
       }
  
