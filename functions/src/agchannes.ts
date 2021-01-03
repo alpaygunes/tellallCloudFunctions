@@ -66,7 +66,7 @@ export class AgChannels{
                   const files = results[0];
                   files.forEach((file:any) => {
                         bucket.file(file.name).delete()
-                        console.log("*****************  sLİNDİ   ***************",file.name)
+                        console.log("*****************  SLİNDİ   ***************",file.name)
                   });
             })
       }

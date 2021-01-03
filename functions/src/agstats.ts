@@ -19,13 +19,19 @@ export class AgStats{
       const before_fb  = change.before.data();
       const after_fb   = change.after.data();
       
-      const authUser = await admin.auth().getUser(context.params.docID);
-      console.log(authUser.email,authUser.displayName,authUser);
+
+      let displayName   = "Anonim"; 
+      try{
+         const authUser = await admin.auth().getUser(context.params.docID);
+         displayName    = authUser.displayName;
+      }catch(e){
+         console.log("displayName Hatası",e.messages)
+      }
       
-      change.after.ref.update({username: authUser.displayName}).then(()=>{
-         console.log("username: authUser.displayName")
+      change.after.ref.update({username: displayName}).then(()=>{
+         console.log("username: displayName")
       }).catch((errr)=>{
-         console.log("username: authUser.displayName - hata",errr.message)
+         console.log("username: displayName - hata",errr.message)
       })
  
       // eğer ilk undefinet ise demekki önceden doc yok bu kullanıcın ilk verisi
