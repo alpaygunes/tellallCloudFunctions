@@ -7,7 +7,9 @@ import { AgChannels }    from './agchannes';
 import { AgMessages }    from './agmessages';
  
 
-exports.RefreshMessageFeedbacks     = AgStats.RefreshMessageFeedbacks;
+exports.CreateFeedbacks             = AgStats.CreateFeedbacks;
+exports.UpdateFeedbacks             = AgStats.UpdateFeedbacks;
 exports.SaveAccount                 = AgAccount.SaveAccount;
 exports.DeleteChannel               = AgChannels.DeleteChannel;
 exports.DeleteMessage               = AgMessages.DeleteMessage;
+exports.AddMessage                  = AgMessages.AddMessage;
