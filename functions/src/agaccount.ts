@@ -5,11 +5,10 @@ const cors = require('cors')({origin: true});
 
 export class AgAccount{ 
     
-   static SaveAccount  =    functions.https.onRequest( (req, res) => {
+   static SaveAccount  =    functions.https.onRequest( (req, res) => { 
       return cors(req, res,  () => {
         const account = req.body;
-        const rslt = {result:'OK',aid:'',message:'',action:''};
-    
+        const rslt = {result:'OK',id:'',message:'',action:''}; 
         //check tag
         if(!AgAccount.cevir(account.tag)){
           rslt.result   = "Error"; 
@@ -18,16 +17,17 @@ export class AgAccount{
           return;
         }
     
-        if(account.id){
+
+        /*if(account.id){
           const aid =  account.id;
           delete account.id;
           admin.firestore().collection("accounts").doc(aid).update({...account}).then(()=>{
             res.json(rslt);
           }).catch(err=>{
-            rslt.result   = "Error";
-            rslt.action   = "update";
-            err['agMessage'] = "Account güncellenirken"
-            rslt.message  = err 
+            rslt.result       = "Error";
+            rslt.action       = "update";
+            err['agMessage']  = "Account güncellenirken hata oluştu"
+            rslt.message      = err 
             res.json(rslt);
           })
         }else{
@@ -37,11 +37,23 @@ export class AgAccount{
             res.json(rslt);
           }).catch(err=>{
             rslt.result       = "Error";
-            err['agMessage']  = "Account eklenirken hata oluştur"
+            err['agMessage']  = "Account eklenirken hata oluştu"
             rslt.message      = err 
             res.json(rslt);
           })
-        }
+        }*/
+        admin.firestore().collection('accounts').doc(account.id).set({...account}).then((ref)=>{
+          rslt.id      = account.id
+          rslt.action   = "add";
+          res.json(rslt);
+        }).catch(err=>{
+          rslt.result       = "Error";
+          err['agMessage']  = "Account eklenirken hata oluştu"
+          rslt.message      = err 
+          res.json(rslt);
+        })
+
+
       })
    }); 
     
@@ -52,13 +64,13 @@ export class AgAccount{
     
       let text:string = tag;
       const trMap:any = {
-                    'çÇ':'c',
-                    'ğĞ':'g',
-                    'şŞ':'s',
-                    'üÜ':'u',
-                    'ıİ':'i',
-                    'öÖ':'o'
-                  };
+                          'çÇ':'c',
+                          'ğĞ':'g',
+                          'şŞ':'s',
+                          'üÜ':'u',
+                          'ıİ':'i',
+                          'öÖ':'o'
+                        };
       for(const key in trMap) {
         text = text.replace(new RegExp('['+key+']','g'), trMap[key]);
       }
@@ -68,4 +80,5 @@ export class AgAccount{
                   .toLowerCase();
        return tag === text?true:false
    }
+   
 }

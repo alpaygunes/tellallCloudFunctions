@@ -16,9 +16,11 @@ export class AgChannels{
                   console.log("-----",err)
             }) 
             await AgChannels.deleteFiles(channelId,uid)
-            AgChannels.deleteSubscribers(event.ref)   
+            AgChannels.deleteSubscribers(event.ref)
             AgChannels.deleteScrets(event.ref)  
-            AgChannels.deleteMessages(event.ref)    
+            AgChannels.deleteMessages(event.ref)   
+            AgChannels.deleteCarts(event.ref);   
+            AgChannels.deleteOrders(event.ref); 
       });
 
       static deleteSubscribers(ref:FirebaseFirestore.DocumentReference){
@@ -57,6 +59,36 @@ export class AgChannels{
                   })
             }).catch((serr)=>{
                   console.log("deleteMessages silinirken hata oldu"+serr.message)
+            })
+      }
+
+      static deleteCarts(ref:FirebaseFirestore.DocumentReference){
+            console.log("deleteCarts Siliniyor")
+            ref.collection("carts").get().then(snapshot => {
+                  snapshot.docs.forEach(msg => { 
+                        msg.ref.parent.doc(msg.id).delete().then(()=>{
+                              console.log("deleteCarts Slindi")
+                        }).catch((err)=>{
+                              console.log("deleteCarts Slindi" , err.message)
+                        })
+                  })
+            }).catch((serr)=>{
+                  console.log("deleteCarts silinirken hata oldu"+serr.message)
+            })
+      }
+
+      static deleteOrders(ref:FirebaseFirestore.DocumentReference){
+            console.log("deleteOrders Siliniyor")
+            ref.collection("orders").get().then(snapshot => {
+                  snapshot.docs.forEach(msg => { 
+                        msg.ref.parent.doc(msg.id).delete().then(()=>{
+                              console.log("deleteOrders Slindi")
+                        }).catch((err)=>{
+                              console.log("deleteOrders Slindi" , err.message)
+                        })
+                  })
+            }).catch((serr)=>{
+                  console.log("deleteOrders silinirken hata oldu"+serr.message)
             })
       }
 
