@@ -44,7 +44,7 @@ export class AgMessages{
 
 
 
-///////////////////////////////////////////  ONCREATE MESSAGE ///////////////////////////////////
+      ///////////////////////////////////////////  ONCREATE MESSAGE ///////////////////////////////////
       static AddMessage   = functions.firestore.document('channels/{channelId}/messages/{messageID}').onCreate(async (event,context) => {
             console.log("ONCREATE MESSAGE TETİKLENDİ")
             const fb_checked:any=[];
