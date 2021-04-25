@@ -5,7 +5,7 @@ import { AgStats }      from './agstats';
 import { AgAccount }    from './agaccount';
 import { AgChannels }    from './agchannes';
 import { AgMessages }    from './agmessages';
-import { AgNotification }    from './agmotification';
+import { AgNotification }    from './agnotification';
  
 
 exports.CreateFeedbacks             = AgStats.CreateFeedbacks;
@@ -14,4 +14,6 @@ exports.SaveAccount                 = AgAccount.SaveAccount;
 exports.DeleteChannel               = AgChannels.DeleteChannel;
 exports.DeleteMessage               = AgMessages.DeleteMessage;
 exports.AddMessage                  = AgMessages.AddMessage;
-exports.AgNotification              = AgNotification.OnOrderStatusUpdated;
+exports.OnOrderStatusUpdated        = AgNotification.OnOrderStatusUpdated;
+exports.OnMessageCreate             = AgNotification.OnMessageCreate;
+exports.OnMessageUpdate             = AgNotification.OnMessageUpdate;
