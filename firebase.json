@@ -26,6 +26,11 @@
         "port": 5000,
         "host": "localhost"
       }
-    }
+    }, 
+    "redirects": [ { 
+      "source": "/site",
+      "destination": "/?web_page=site",
+      "type": 301
+    } ]
   }
 }
