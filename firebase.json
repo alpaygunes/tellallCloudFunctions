@@ -20,6 +20,9 @@
     "rewrites": [ {
       "source": "/SaveAccount",
       "function": "SaveAccount"
+    },{ 
+      "source": "**",
+      "destination": "/index.html"
     } ],
     "emulators": { 
       "hosting": {
